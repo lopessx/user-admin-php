@@ -36,6 +36,8 @@
  * @filesource
  */
 
+define('ROOT_PATH', __DIR__);
+
 /*
  *---------------------------------------------------------------
  * APPLICATION ENVIRONMENT

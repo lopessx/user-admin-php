@@ -57,13 +57,13 @@
         }
 
         .btn.btn-back {
-            background-color:rgb(255, 255, 255);
+            background-color: rgb(255, 255, 255);
             color: black;
             margin: 10px 0px;
         }
 
         .btn.btn-back:hover {
-            background-color:rgb(202, 202, 202);
+            background-color: rgb(202, 202, 202);
             color: black;
             margin: 10px 0px;
         }
@@ -110,8 +110,28 @@
         }
 
         function showNextStep() {
-            document.getElementById('mainRegister').style = 'display: none;'
-            document.getElementById('address').style = 'display: block;'
+            const name = document.getElementById('name');
+            const email = document.getElementById('email');
+            const password = document.getElementById('password');
+            const passwordConfirm = document.getElementById('confirm_password');
+
+            name.reportValidity();
+            email.reportValidity();
+
+            if (name.checkValidity() && email.checkValidity()) {
+                password.reportValidity();
+                passwordConfirm.reportValidity();
+
+                if (password.checkValidity() && passwordConfirm.checkValidity()) {
+                    if (password.value !== passwordConfirm.value) {
+                        alert("Passwords do not match!");
+                        return;
+                    }
+
+                    document.getElementById('mainRegister').style = 'display: none;'
+                    document.getElementById('address').style = 'display: block;'
+                }
+            }
         }
 
         function stepBack() {
@@ -166,7 +186,8 @@
                     <input class="inputForm" type="text" id="number" name="number" required>
                 </div>
                 <button type="submit" class="btn">Register ></button>
-                <button type="button" class="btn btn-back" onclick="stepBack()">< Back</button>
+                <button type="button" class="btn btn-back" onclick="stepBack()">
+                    < Back</button>
 
             </div>
         </form>

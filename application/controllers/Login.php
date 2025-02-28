@@ -1,7 +1,8 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class Login extends CI_Controller {
+class Login extends CI_Controller
+{
 
 	/**
 	 * Index Page for this controller.
@@ -23,7 +24,33 @@ class Login extends CI_Controller {
 		$this->load->view('login');
 	}
 
-    public function auth() {
-        echo 'auth this shit' . $_POST['email'] . ' - ' . $_POST['password'];
-    }
+	public function auth()
+	{
+		// TODO fix hash auth not working
+		$this->load->model('User_model');
+
+		$email = $this->input->post('email');
+		$password = $this->input->post('password');
+		$user = $this->User_model->get_user_by_email($email);
+
+		if ($user && password_verify($password, $user->password)) {
+			$user_data = array(
+				'user_id' => $user->id,
+				'name' => $user->name,
+				'email' => $user->email,
+				'logged_in' => true
+			);
+			$this->session->set_userdata($user_data);
+
+			redirect('profile/user/' . $user->id);
+		} else {
+			redirect('login');
+		}
+	}
+
+	public function logout()
+	{
+		$this->session->sess_destroy();
+		redirect('login');
+	}
 }

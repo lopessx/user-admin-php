@@ -10,12 +10,13 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #f8f9fa;
+            background: rgb(2, 0, 36);
+            background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(17, 34, 55, 1) 35%, rgba(10, 84, 133, 1) 100%);
         }
         .container {
             width: 400px;
             padding: 20px;
-            background: white;
+            color: white;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
             border-radius: 5px;
         }
@@ -43,6 +44,23 @@
             color: red;
             font-size: 0.9em;
             display: none;
+        }
+        .btn {
+            width: 100%;
+            padding: 10px;
+            background-color: #00008b;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .btn:hover {
+            background-color: #030347;
+        }
+        .inputForm:focus {
+            background: #d1d1d1;
         }
     </style>
     <script>
@@ -80,14 +98,15 @@
 <body>
     <div class="container">
         <h3 class="text-center">Edit Profile</h3>
-        <form id="editProfileForm" action="profile/update/<?php echo $user->id; ?>" method="post">
-            <div class="form-group">
+        <form id="editProfileForm" action="/profile/edit/" method="post">
+        <input type="hidden" value="<?php echo $address_id; ?>"/>
+        <div class="form-group">
                 <label for="name">Name</label>
-                <input type="text" id="name" name="name" value="<?php echo $user->name; ?>" required>
+                <input type="text" id="name" name="name" value="<?php echo $name; ?>" required>
             </div>
             <div class="form-group">
                 <label for="email">Email</label>
-                <input type="email" id="email" name="email" value="<?php echo $user->email; ?>" required>
+                <input type="email" id="email" name="email" value="<?php echo $email; ?>" required>
             </div>
             <div class="form-group">
                 <label for="password">New Password (leave blank to keep current)</label>
@@ -100,25 +119,30 @@
             </div>
             <div class="form-group">
                 <label for="zipcode">Zipcode</label>
-                <input type="text" id="zipcode" name="zipcode" value="<?php echo $user->zipcode; ?>" required maxlength="9" oninput="formatZipcode(this)">
+                <input type="text" id="zipcode" name="zipcode" value="<?php echo $zipcode; ?>" required maxlength="9" oninput="formatZipcode(this)">
             </div>
             <div class="form-group">
                 <label for="state">State</label>
-                <input type="text" id="state" name="state" value="<?php echo $user->state; ?>" required>
+                <input type="text" id="state" name="state" value="<?php echo $state; ?>" required>
             </div>
             <div class="form-group">
                 <label for="city">City</label>
-                <input type="text" id="city" name="city" value="<?php echo $user->city; ?>" required>
+                <input type="text" id="city" name="city" value="<?php echo $city; ?>" required>
             </div>
             <div class="form-group">
                 <label for="street">Street</label>
-                <input type="text" id="street" name="street" value="<?php echo $user->street; ?>" required>
+                <input type="text" id="street" name="street" value="<?php echo $street; ?>" required>
             </div>
             <div class="form-group">
                 <label for="number">Number</label>
-                <input type="text" id="number" name="number" value="<?php echo $user->number; ?>" required>
+                <input type="text" id="number" name="number" value="<?php echo $number; ?>" required>
             </div>
             <button type="submit" class="btn">Save Changes</button>
+        </form>
+
+        <!-- Logout Button -->
+        <form action="/login/logout" method="post" style="margin-top: 20px;">
+            <button type="submit" class="btn" style="background-color: #dc3545;">Logout</button>
         </form>
     </div>
 </body>

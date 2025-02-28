@@ -1,7 +1,8 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class Register extends CI_Controller {
+class Register extends CI_Controller
+{
 
 	/**
 	 * Index Page for this controller.
@@ -23,7 +24,42 @@ class Register extends CI_Controller {
 		$this->load->view('register');
 	}
 
-    public function new() {
-        echo 'new user: ' . var_export($_POST, true);
-    }
+	public function new()
+	{
+		$this->load->model('User_model');
+		$this->load->model('Address_model');
+
+		$dataUser = [
+			'fullname'     => $this->input->post('name'),
+			'email'    => $this->input->post('email'),
+			'password_hash' => password_hash($this->input->post('password'), PASSWORD_DEFAULT),
+			'active'   => '1'
+		];
+		$idUser = $this->User_model->store($dataUser);
+
+		$dataAddress = [
+			'zipcode' => $this->input->post('zipcode'),
+			'state' => $this->input->post('state'),
+			'city' => $this->input->post('city'),
+			'street' => $this->input->post('street'),
+			'number' => $this->input->post('number'),
+			'user_id' => $idUser
+		];
+		
+		$resultAddress = $this->Address_model->store($dataAddress);
+
+		if ($resultAddress) {
+			$user_data = array(
+				'user_id' => $idUser,
+				'name' => $this->input->post('name'),
+				'email' => $this->input->post('email'),
+				'logged_in' => true
+			);
+			$this->session->set_userdata($user_data);
+
+			redirect('profile/user/' . $idUser);
+		} else {
+			echo 'Error on register';
+		}
+	}
 }
