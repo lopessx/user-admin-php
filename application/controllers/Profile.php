@@ -21,7 +21,6 @@ class Profile extends CI_Controller
 	 */
 	public function index()
 	{
-		// TODO Verify if user is logged in and redirect
 		if (!$this->session->userdata('logged_in')) {
 			redirect('login');
 		} else {
@@ -39,7 +38,6 @@ class Profile extends CI_Controller
 		$this->load->model('Address_model');
 		$addressData = $this->Address_model->get_by_user($userData['user_id'])[0];
 
-		$data['userId'] = $userData['user_id'];
 		$data['name'] = $userData['name'];
 		$data['email'] = $userData['email'];
 		$data['userActive'] = '1';
@@ -49,7 +47,7 @@ class Profile extends CI_Controller
 		$data['city'] = $addressData->city;
 		$data['street'] = $addressData->street;
 		$data['number'] = $addressData->number;
-		$data['user_id'] = $addressData->user_id;
+		$data['user_id'] = $userData['user_id'];
 
 		$this->load->view('profile', $data);
 	}
@@ -60,12 +58,19 @@ class Profile extends CI_Controller
 		$this->load->model('Address_model');
 
 		$dataUser = [
-			'fullname'     => $this->input->post('name'),
-			'email'    => $this->input->post('email'),
-			'password_hash' => password_hash($this->input->post('password'), PASSWORD_DEFAULT),
-			'active'   => '1'
+			'fullname' => $this->input->post('name'),
+			'email' => $this->input->post('email'),
+			'active' => '1'
 		];
-		$idUser = $this->User_model->update($dataUser);
+
+		if (!empty($this->input->post('password'))) {
+			$dataUser['password_hash'] = password_hash($this->input->post('password'), PASSWORD_DEFAULT);
+		}
+
+		$userId = $this->session->userdata('user_id');
+		$addressId = $this->input->post('address_id');
+
+		$resultUser = $this->User_model->update($userId, $dataUser);
 
 		$dataAddress = [
 			'zipcode' => $this->input->post('zipcode'),
@@ -73,21 +78,21 @@ class Profile extends CI_Controller
 			'city' => $this->input->post('city'),
 			'street' => $this->input->post('street'),
 			'number' => $this->input->post('number'),
-			'user_id' => $idUser
+			'user_id' => $userId
 		];
 
-		$resultAddress = $this->Address_model->update($dataAddress);
+		$resultAddress = $this->Address_model->update($addressId, $dataAddress);
 
-		if ($resultAddress) {
+		if ($resultUser && $resultAddress) {
 			$user_data = array(
-				'user_id' => $idUser,
+				'user_id' => $userId,
 				'name' => $this->input->post('name'),
 				'email' => $this->input->post('email'),
 				'logged_in' => true
 			);
 			$this->session->set_userdata($user_data);
 
-			redirect('profile/user/' . $idUser);
+			redirect('profile/user/' . $userId);
 		} else {
 			echo 'Error on register';
 		}
