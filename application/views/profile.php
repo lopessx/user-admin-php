@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,10 +10,10 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
             background: rgb(2, 0, 36);
             background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(17, 34, 55, 1) 35%, rgba(10, 84, 133, 1) 100%);
         }
+
         .container {
             width: 400px;
             padding: 20px;
@@ -20,18 +21,22 @@
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
             border-radius: 5px;
         }
+
         .form-group {
             margin-bottom: 15px;
         }
+
         .form-group label {
             display: block;
             margin-bottom: 5px;
         }
+
         .form-group input {
             width: 100%;
             padding: 8px;
             box-sizing: border-box;
         }
+
         .btn {
             width: 100%;
             padding: 10px;
@@ -40,11 +45,13 @@
             border: none;
             cursor: pointer;
         }
+
         .error {
             color: red;
             font-size: 0.9em;
             display: none;
         }
+
         .btn {
             width: 100%;
             padding: 10px;
@@ -56,9 +63,11 @@
             font-size: 16px;
             font-weight: bold;
         }
+
         .btn:hover {
             background-color: #030347;
         }
+
         .inputForm:focus {
             background: #d1d1d1;
         }
@@ -71,12 +80,12 @@
             }
             input.value = value;
         }
-        
+
         function validatePassword() {
             let password = document.getElementById("password").value;
             let confirmPassword = document.getElementById("confirm_password").value;
             let errorMessage = document.getElementById("password_error");
-            
+
             if (password !== confirmPassword) {
                 errorMessage.style.display = "block";
                 return false;
@@ -85,7 +94,7 @@
                 return true;
             }
         }
-        
+
         document.addEventListener("DOMContentLoaded", function() {
             document.getElementById("editProfileForm").addEventListener("submit", function(event) {
                 if (!validatePassword()) {
@@ -95,11 +104,13 @@
         });
     </script>
 </head>
+
 <body>
     <div class="container">
         <h3 class="text-center">Edit Profile</h3>
         <form id="editProfileForm" action="/profile/edit/" method="post">
-        <input type="hidden" value="<?php echo $address_id; ?>"/>
+        <input type="hidden" name="address_id" value="<?php echo $address_id; ?>" />
+        <input type="hidden" name="user_id" value="<?php echo $user_id; ?>" />
         <div class="form-group">
                 <label for="name">Name</label>
                 <input type="text" id="name" name="name" value="<?php echo $name; ?>" required>
@@ -146,4 +157,5 @@
         </form>
     </div>
 </body>
+
 </html>

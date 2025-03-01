@@ -26,17 +26,20 @@ class Login extends CI_Controller
 
 	public function auth()
 	{
-		// TODO fix hash auth not working
 		$this->load->model('User_model');
 
 		$email = $this->input->post('email');
 		$password = $this->input->post('password');
 		$user = $this->User_model->get_user_by_email($email);
 
-		if ($user && password_verify($password, $user->password)) {
+		if(is_array($user)) {
+			$user = $user[0];
+		}
+
+		if ($user && password_verify($password, $user->password_hash)) {
 			$user_data = array(
 				'user_id' => $user->id,
-				'name' => $user->name,
+				'name' => $user->fullname,
 				'email' => $user->email,
 				'logged_in' => true
 			);
